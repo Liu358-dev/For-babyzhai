@@ -20,6 +20,42 @@
             user-select: none;
         }
 
+        /* 音乐控制按钮 */
+        .music-control {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 100;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            animation: gentlePulse 3s ease-in-out infinite;
+        }
+
+        .music-control:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .music-control.playing {
+            animation: none;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        @keyframes gentlePulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(255, 255, 255, 0.4); }
+        }
+
         /* 星空背景 */
         .stars {
             position: fixed;
@@ -138,7 +174,6 @@
             transform: translate(-50%, -50%) scale(0);
         }
 
-        /* 信封提示文字 */
         .envelope-hint {
             position: absolute;
             bottom: -40px;
@@ -292,12 +327,24 @@
             .letter-text {
                 font-size: 14px;
             }
+            .music-control {
+                top: 20px;
+                right: 20px;
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
         }
     </style>
 </head>
 <body>
     <!-- 星空背景 -->
     <div class="stars" id="stars"></div>
+
+    <!-- 音乐控制按钮 -->
+    <div class="music-control" id="musicControl" title="点击播放音乐">
+        🎵
+    </div>
 
     <!-- 信封 -->
     <div class="container">
@@ -308,7 +355,7 @@
                     <div class="envelope-seal">💌</div>
                 </div>
             </div>
-            <div class="envelope-hint">— 点我打开 —</div>
+            <div class="envelope-hint">— 乖宝点我~ —</div>
         </div>
     </div>
 
@@ -316,26 +363,90 @@
     <div class="letter" id="letter">
         <button class="close-letter" id="closeLetter">✕</button>
         <div class="letter-content">
-            <h2 class="letter-title">亲爱的乖宝 翟疏桐</h2>
+            <h2 class="letter-title">连夜码给我乖宝的一封信</h2>
             <div class="letter-text">
-                <p>这是我们度过的第一个520，<br>生活需要一些惊喜来装点</p>
-                <p>于是有了这封‘信’，<br>遇见你让我相信了世界上有缘分这回事<br>它调整了我的有关于你的轨迹。</p>
-                <p>其实比起轰轰烈烈的爱<br>我更喜欢慢慢爱你，<br>我不懂什么是合适<br>但世界上没有天生配对的两人。</p>
-                <p>如果你愿意和我并肩——<br>我们就是最合适的两个人，<br>生生世世都是。</p>
+                <p>亲爱的翟疏桐，见字如面<br>这是我们一起度过的第一个520</p>
+                <p>生活需要一些惊喜来点缀，于是有了这封信。<br>有些人有些事有些爱在见到第一次<br>就注定要羁绊一生。</p>
+                <p>就像我见到你的第一面，我就知道，我这辈子都会为你沉沦。<br>其实比起轰轰烈烈的爱，<br>我更喜欢慢慢的爱你<br>我不懂什么是合适，</p>
+                <p>但世界上没有天生就配对的两个人<br>如果你愿意永远和我并肩，<br>我们就是最合适的人。</p>
             </div>
             <div class="letter-signature">
-                永远爱你的 大宝
+                永远爱你的大宝
             </div>
         </div>
     </div>
 
-    <!-- 背景音乐（可选） -->
+    <!-- 背景音乐 -->
+    <!-- 
+    ============================================
+    音乐设置说明：
+    请将你的MP3文件与index.html放在同一文件夹
+    然后将下方 src 改成你的歌曲文件名
+    例如：src="./your-song.mp3"
+    ============================================
+    -->
     <audio id="bgMusic" loop preload="auto">
-        <source src="data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADwAD///////////////////////////////////////////8AAAA5TEFNRTMuOTlyAc0AAAAAAAAAABSAJAJAQgAAgAAAA8Qt7b6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQZAAP8AAAaQAAAAgAAA0gAAABAAABpAAAACAAADSAAAAETEFNRTMuOTlyAc0AAAAAAAAAABSAJAJAQgAAgAAAA8Qt7b6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQZAAP8AAAaQAAAAgAAA0gAAABAAABpAAAACAAADSAAAAETEFNRTMuOTlyAc0AAAAAAAAAABSAJAJAQgAAgAAAA8Qt7b6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" type="audio/mpeg">
+        <source src="./love-song.mp3" type="audio/mpeg">
+        你的浏览器不支持音频播放
     </audio>
 
     <script>
-        // 创建星空
+        // ==================== 音乐控制 ====================
+        const bgMusic = document.getElementById('bgMusic');
+        const musicControl = document.getElementById('musicControl');
+        let isMusicPlaying = false;
+
+        // 设置音量（0.0 到 1.0）
+        bgMusic.volume = 0.4;
+
+        // 音乐按钮点击事件
+        musicControl.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMusic();
+        });
+
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                musicControl.textContent = '🎵';
+                musicControl.classList.remove('playing');
+            } else {
+                playMusic();
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        function playMusic() {
+            bgMusic.play().then(() => {
+                musicControl.textContent = '🎶';
+                musicControl.classList.add('playing');
+                isMusicPlaying = true;
+            }).catch((error) => {
+                console.log('自动播放被阻止，等待用户交互');
+                // 微信等浏览器需要用户主动触发
+                isMusicPlaying = false;
+                musicControl.textContent = '🎵';
+            });
+        }
+
+        // 首次用户交互时自动播放（解决微信浏览器限制）
+        let musicStarted = false;
+        document.addEventListener('click', () => {
+            if (!musicStarted) {
+                playMusic();
+                musicStarted = true;
+            }
+        }, { once: false });
+
+        // 触摸事件（移动端）
+        document.addEventListener('touchstart', () => {
+            if (!musicStarted) {
+                playMusic();
+                musicStarted = true;
+            }
+        }, { once: false });
+
+        // ==================== 创建星空 ====================
         function createStars() {
             const starsContainer = document.getElementById('stars');
             const starCount = 200;
@@ -363,7 +474,7 @@
             }
         }
 
-        // 创建花瓣
+        // ==================== 创建花瓣 ====================
         function createPetal() {
             const petal = document.createElement('div');
             petal.className = 'petal';
@@ -391,7 +502,6 @@
             }, (duration + delay) * 1000);
         }
 
-        // 持续创建花瓣
         function startPetals() {
             setInterval(() => {
                 if (document.querySelectorAll('.petal').length < 15) {
@@ -399,32 +509,33 @@
                 }
             }, 800);
             
-            // 初始创建一些花瓣
             for (let i = 0; i < 5; i++) {
                 setTimeout(() => createPetal(), i * 600);
             }
         }
 
-        // 信封交互
+        // ==================== 信封交互 ====================
         const envelopeWrapper = document.getElementById('envelopeWrapper');
         const envelope = document.getElementById('envelope');
         const letter = document.getElementById('letter');
         const closeLetter = document.getElementById('closeLetter');
         let isOpened = false;
 
-        envelopeWrapper.addEventListener('click', () => {
+        envelopeWrapper.addEventListener('click', (e) => {
+            e.stopPropagation();
             if (!isOpened) {
                 envelope.classList.add('opened');
                 isOpened = true;
                 
-                // 延迟显示信件
+                // 打开信封时播放音乐
+                if (!isMusicPlaying) {
+                    playMusic();
+                }
+                
                 setTimeout(() => {
                     letter.classList.add('show');
-                    // 播放轻柔音效
-                    playSoftSound();
                 }, 800);
                 
-                // 打开时增加花瓣
                 for (let i = 0; i < 8; i++) {
                     setTimeout(() => createPetal(), i * 200);
                 }
@@ -441,7 +552,6 @@
             }, 600);
         });
 
-        // 点击信件外部关闭
         document.addEventListener('click', (e) => {
             if (isOpened && !letter.contains(e.target) && !envelopeWrapper.contains(e.target)) {
                 letter.classList.remove('show');
@@ -451,31 +561,6 @@
                 }, 600);
             }
         });
-
-        // 轻柔音效
-        function playSoftSound() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                
-                oscillator.type = 'sine';
-                oscillator.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
-                oscillator.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.2); // E5
-                oscillator.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.4); // G5
-                
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1);
-                
-                oscillator.start(audioCtx.currentTime);
-                oscillator.stop(audioCtx.currentTime + 1);
-            } catch (e) {
-                // 静默处理音频错误
-            }
-        }
 
         // 键盘控制
         document.addEventListener('keydown', (e) => {
@@ -489,19 +574,16 @@
             if (e.key === 'Enter' && !isOpened) {
                 envelopeWrapper.click();
             }
+            // 空格键控制音乐
+            if (e.key === ' ') {
+                e.preventDefault();
+                toggleMusic();
+            }
         });
 
-        // 初始化
+        // ==================== 初始化 ====================
         createStars();
         startPetals();
-
-        // 提示：在移动设备上需要用户交互才能播放音频
-        document.addEventListener('click', () => {
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-        }, { once: true });
     </script>
 </body>
 </html>
